@@ -1,28 +1,17 @@
 /* eslint-disable import/first */
 
-// mock setup
-// addressSearch
-import { Address } from "./Address";
-
+// mock setup, must come before AddressAutofillController import
 jest.mock("./AddressSearchService", () => ({
     addressSearch: jest.fn(),
     NOT_FOUND_SEARCH_RESULT: jest.fn(),
 }));
-import {
-    addressSearch,
-    AddressSearchResult,
-    NOT_FOUND_SEARCH_RESULT,
-} from "./AddressSearchService";
-
-// addressSearch
 jest.mock("./AddressAutofillActions");
+import { addressSearch, AddressSearchResult } from "./AddressSearchService";
 import { updateAddress as updateAddressAction } from "./AddressAutofillActions";
-
-// dispatch
 const dispatch = jest.fn();
 
-// function we are testing
 import { attemptAutofill } from "./AddressAutofillController";
+import { Address } from "./Address";
 
 function mockAddressSearchResult(
     addressSearchResult: object = {}
@@ -43,6 +32,13 @@ function mockAddressSearchResult(
     addressSearch.mockReturnValue(mergedAddressSearchResult);
 
     return mergedAddressSearchResult;
+}
+
+function mockUpdateAddressAction() {
+    const expectedAction = { Type: "DO_ACTION" };
+    // @ts-ignore
+    updateAddressAction.mockReturnValue(expectedAction);
+    return expectedAction;
 }
 
 describe("AddressAutofillController", () => {
@@ -91,9 +87,7 @@ describe("AddressAutofillController", () => {
             mockAddressSearchResult({
                 foundMatch: true,
             });
-            const expectedAction = { Type: "DO_ACTION" };
-            // @ts-ignore
-            updateAddressAction.mockReturnValue(expectedAction);
+            const expectedAction = mockUpdateAddressAction();
 
             runAutoFill();
 
@@ -105,9 +99,7 @@ describe("AddressAutofillController", () => {
             mockAddressSearchResult({
                 foundMatch: false,
             });
-            const expectedAction = { Type: "DO_ACTION" };
-            // @ts-ignore
-            updateAddressAction.mockReturnValue(expectedAction);
+            mockUpdateAddressAction();
 
             runAutoFill();
 
@@ -129,6 +121,8 @@ describe("AddressAutofillController", () => {
                 foundMatch: false,
             });
 
+            // definition of return type important here as it
+            // allows TS to break this test if we change this
             const result: Address = runAutoFill(exampleAddressObject);
 
             expect(result).toBe(exampleAddressObject);
