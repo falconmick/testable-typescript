@@ -1,8 +1,14 @@
 /* eslint-disable import/first */
 
 // mock setup, must come before AddressAutofillController import
+// the following mock setup should have been:
+// jest.mock("./AddressSearchService");
+// but I wanted to demo how you can get in and play with the definitions
+// of the mocks... We could use a customer mocking solution
+// as such as Nsubstitute for Typescript here, however if we use jest.fn() you will
+// need to remember that after each execution we are reseting the jest.fn().
 jest.mock("./AddressSearchService", () => ({
-    addressSearch: jest.fn(),
+    addressSearch: jest.fn().mockReturnValue("fii"),
     NOT_FOUND_SEARCH_RESULT: jest.fn(),
 }));
 jest.mock("./AddressAutofillActions");
@@ -128,7 +134,13 @@ describe("AddressAutofillController", () => {
             expect(result).toBe(exampleAddressObject);
         });
     });
+
+    // this is scoped to the entire suit and will be ran before each test
+    // including those inside of other describe scopes.
     beforeEach(() => {
+        // undoes any mockReturnValue and counters changed inside of the scope of the test
+        // todo: figure out way to reset mocks without destroying custom setuo
+        // inside of the jest.mock calls
         jest.resetAllMocks();
     });
 });
