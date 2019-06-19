@@ -7,3 +7,9 @@ it('renders without crashing', () => {
   ReactDOM.render(<App />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
+
+it('lets me debug', () => {
+  // @ts-ignore
+  const aaa = App();
+  console.log('bar')
+})

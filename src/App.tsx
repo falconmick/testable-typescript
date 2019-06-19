@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {createElement} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 const App: React.FC = () => {
+  return createElement('div', {className: "App"})
   return (
     <div className="App">
       <header className="App-header">
