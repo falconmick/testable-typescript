@@ -11,7 +11,11 @@ type FunctionType<T extends (...args: any) => any> = T extends (
     ? T
     : any;
 
-type Mock<T> = jest.Mock<T> & T;
+type Mock<T extends (...args: any) => any> = jest.Mock<
+    ReturnType<T>,
+    Parameters<T>
+> &
+    T;
 type ValueMock<T> = jest.Mock<T> | any;
 
 describe("AddressAutofillController", () => {
