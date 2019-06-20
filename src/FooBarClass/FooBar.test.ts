@@ -31,6 +31,7 @@ This will be hard to make.
 
 describe("FooBar", () => {
     describe("Testing @fluffy-spoon/substitute", () => {
+        // #### this fails because it's not supported
         it("Should be compatible with auto-mocking nested items", () => {
             const barNest = Substitute.for<IBarNester>();
 
@@ -40,6 +41,7 @@ describe("FooBar", () => {
             expect(barNest.WooWWeeSomeBar().CallBar('foo')).toEqual('magic')
         })
 
+        // #### this fails because it's not supported
         it("Should be compatible with auto-mocking nested items which have param", () => {
             const barNest = Substitute.for<IBarNester>();
 
