@@ -1,9 +1,11 @@
 import React, {createElement} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {attemptAutofill} from "./ManualDiMethod/AddressAutofillController";
 
 const App: React.FC = () => {
   return createElement('div', {className: "App"})
+  attemptAutofill(action => 'wow DI')({postcode: 'test'})
   return (
     <div className="App">
       <header className="App-header">

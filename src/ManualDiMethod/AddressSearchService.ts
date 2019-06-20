@@ -11,9 +11,4 @@ export const NOT_FOUND_SEARCH_RESULT: AddressSearchResult = {
     foundMatch: false,
 };
 
-export const addressSearch: AddressSearchType = address => ({
-    address: {},
-    foundMatch: false,
-});
-
 export type AddressSearchType = (address: Address) => AddressSearchResult;

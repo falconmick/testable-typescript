@@ -1,5 +1,3 @@
 import { Address } from "./Address";
 
-export const updateAddress = (address: Address): object => {
-    return {};
-};
+export type UpdateAddressType = (address: Address) => object;

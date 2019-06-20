@@ -1,32 +1,6 @@
-import {
-    addressSearch,
-    AddressSearchResult,
-    NOT_FOUND_SEARCH_RESULT,
-} from "./AddressSearchService";
-import { updateAddress } from "./AddressAutofillActions";
+import { AddressSearchResult, AddressSearchType } from "./AddressSearchService";
+import { UpdateAddressType } from "./AddressAutofillActions";
 import { Address } from "./Address";
-
-// would move to a global declaration
-// type AnyFunction = (...args: any[]) => any;
-
-// type AddressSearchType = (Parameters<typeof addressSearch>) => ReturnType<addressSearch>
-// type Parameters<T extends (...args: any) => any> = T extends (
-//     ...args: infer P
-// ) => any
-//     ? P
-//     : never;
-//
-// type ReturnType<T extends (...args: any) => any> = T extends (
-//     ...args: any
-// ) => infer R
-//     ? R
-//     : any;
-
-type FunctionType<T extends (...args: any) => any> = T extends (
-    ...args: Parameters<T>
-) => ReturnType<T>
-    ? T
-    : any;
 
 // All testable services are created with the following type
 // type InjectableService = (...injectables: any[]) => (...args: any[]) => any;
@@ -38,10 +12,9 @@ type FunctionType<T extends (...args: any) => any> = T extends (
 // next is the function which is the function which accepts a dispatch and returns another function
 // this is acceptable as an InjectablService's second function's return value is any
 // and thus another function is a.O.K!
-
 export const __attemptAutofill = (
-    _addressSearch: FunctionType<typeof addressSearch>,
-    _updateAddress: FunctionType<typeof updateAddress>,
+    _addressSearch: AddressSearchType,
+    _updateAddress: UpdateAddressType,
     _NOT_FOUND_SEARCH_RESULT: AddressSearchResult
 ) => (dispatch: (action: object) => void) => (address: Address): Address => {
     const { address: addressSearchResult, foundMatch } =
@@ -55,8 +28,32 @@ export const __attemptAutofill = (
     return address;
 };
 
-export const attemptAutofill = __attemptAutofill(
-    addressSearch,
-    updateAddress,
-    NOT_FOUND_SEARCH_RESULT
+// This is how we do the manual DI, currently we don't have the
+// dependencies defined so we cannot make it avaliable
+// export const attemptAutofill = __attemptAutofill(
+//     addressSearch,
+//     updateAddress,
+//     NOT_FOUND_SEARCH_RESULT
+// );
+// bellow shows how once you have setup the DI, the three dependancies would
+// be defined normally in other files, but I am just making fake ones here
+// so that we can see an example how how you would setup the DI
+const exampleAddressSearchFnc: AddressSearchType = address => ({
+    foundMatch: false,
+    address: { postcode: "2222" },
+});
+const exampleAddressfnc: UpdateAddressType = address => ({});
+const exampleAddressSearchResult: AddressSearchResult = {
+    foundMatch: false,
+    address: { postcode: "2222" },
+};
+export const attemptAutofill: ReturnType<
+    typeof __attemptAutofill
+> = __attemptAutofill(
+    exampleAddressSearchFnc,
+    exampleAddressfnc,
+    exampleAddressSearchResult
 );
+
+// this is then how you would call the injected service
+attemptAutofill(action => "my dispatcher")({ postcode: "example request!" });

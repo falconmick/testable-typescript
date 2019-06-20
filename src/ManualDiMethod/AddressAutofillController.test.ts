@@ -1,7 +1,7 @@
-import { addressSearch, AddressSearchResult } from "./AddressSearchService";
+import { AddressSearchResult, AddressSearchType } from "./AddressSearchService";
 import { Address } from "./Address";
 import * as AddressAutofillController from "./AddressAutofillController";
-import { updateAddress } from "./AddressAutofillActions";
+import { UpdateAddressType } from "./AddressAutofillActions";
 
 const dispatch = jest.fn();
 
@@ -21,8 +21,8 @@ type ValueMock<T> = jest.Mock<T> | any;
 describe("AddressAutofillController", () => {
     describe("attemptAutofill", () => {
         // injectables
-        let _addressSearch: Mock<typeof addressSearch>;
-        let _updateAddressAction: Mock<typeof updateAddress>;
+        let _addressSearch: Mock<AddressSearchType>;
+        let _updateAddressAction: Mock<UpdateAddressType>;
         let _NOT_FOUND_SEARCH_RESULT: ValueMock<AddressSearchResult>;
 
         // unit we are testing
