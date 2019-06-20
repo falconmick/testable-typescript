@@ -27,6 +27,9 @@ That being said, no reason why I couldn't look into using ReturnType<typeof theM
 This will be hard to make.
 3. We won't be able to use this for the react components (but hey, maybe we want that distinction
 4. Interface Class feel is more natural as a C# Dev
+5. Given the functional nature of react, in parts where normally we would use currying (I.e adding a 
+dispatcher to a function) we would be forced out of currying As you would need to make it a param of 
+the method on the controller.
  */
 
 describe("FooBar", () => {
